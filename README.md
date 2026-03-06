@@ -5,6 +5,15 @@ forecasts demand by temperature bucket, and generates store layout-change
 suggestions. Exposed as an **MCP server** so AI assistants (Claude Desktop,
 VS Code Copilot, etc.) can call the tools directly.
 
+Short introduction video:
+https://github.com/user-attachments/assets/bdb07f87-5e2a-4974-be23-12ba47560132
+
+Notion project page:
+https://neighborly-fridge-ea2.notion.site/Weather-smart-merchandiser-31a4fffb13a880618b7fd4198be66b30
+
+Notion DIY dashboard page:
+https://neighborly-fridge-ea2.notion.site/DIY-Weather-Smart-Merchandising-fffb7fe844f841bda431202321e29ac9
+
 ## Project structure
 
 | File | Purpose |
