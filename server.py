@@ -18,7 +18,7 @@ from first_python_module import (
     forecast_temperatures,
     generate_layout_actions,
     temp_bucket,
-    DEFAULT_CSV_PATH,
+    DEFAULT_DB_PATH,
     DEFAULT_COLD_MAX,
     DEFAULT_WARM_MIN,
 )
@@ -30,16 +30,16 @@ mcp = FastMCP("weather-smart-merchandiser")
 # ---- tools ----
 
 @mcp.tool()
-def list_stores(csv_path: str = DEFAULT_CSV_PATH) -> list[str]:
+def list_stores(db_path: str = DEFAULT_DB_PATH) -> list[str]:
     """Return a list of unique store names in the dataset."""
-    df = pd.read_csv(csv_path)
+    df = load_data(db_path)
     return sorted(df["Store"].unique().tolist())
 
 
 @mcp.tool()
 def demand_signals(
     store: str = "Riga 1",
-    csv_path: str = DEFAULT_CSV_PATH,
+    db_path: str = DEFAULT_DB_PATH,
     cold_max: int = DEFAULT_COLD_MAX,
     warm_min: int = DEFAULT_WARM_MIN,
 ) -> list[dict]:
@@ -50,7 +50,7 @@ def demand_signals(
     Returns a list of records with columns:
     TempBucket, Category, Units Sold (avg).
     """
-    df = load_data(csv_path, store=store)
+    df = load_data(db_path, store=store)
     avg = get_demand_signals(df, cold_max, warm_min)
     return avg.to_dict(orient="records")
 
@@ -60,7 +60,7 @@ def top_categories(
     temp_bucket_name: str,
     store: str = "Riga 1",
     top_n: int = 2,
-    csv_path: str = DEFAULT_CSV_PATH,
+    db_path: str = DEFAULT_DB_PATH,
     cold_max: int = DEFAULT_COLD_MAX,
     warm_min: int = DEFAULT_WARM_MIN,
 ) -> list[str]:
@@ -73,7 +73,7 @@ def top_categories(
     store            : store name to filter on
     top_n            : how many top categories to return
     """
-    df = load_data(csv_path, store=store)
+    df = load_data(db_path, store=store)
     avg = get_demand_signals(df, cold_max, warm_min)
     return get_top_categories(avg, temp_bucket_name, top_n)
 
@@ -89,7 +89,7 @@ def forecast(
     store: str = "Riga 1",
     days_ahead: int = 3,
     delta_per_day: float = 2.0,
-    csv_path: str = DEFAULT_CSV_PATH,
+    db_path: str = DEFAULT_DB_PATH,
 ) -> list[dict]:
     """
     Return a simple toy forecast for a store:
@@ -97,7 +97,7 @@ def forecast(
 
     Returns a list of {day, date, forecast_temp, temp_bucket}.
     """
-    df = load_data(csv_path, store=store)
+    df = load_data(db_path, store=store)
     last_date = df["Date"].max()
     last_temp = df.loc[df["Date"] == last_date, "Temp °C"].mean()
     temps = forecast_temperatures(last_temp, days_ahead, delta_per_day)
@@ -119,7 +119,7 @@ def layout_actions(
     store: str = "Riga 1",
     days_ahead: int = 3,
     top_n: int = 2,
-    csv_path: str = DEFAULT_CSV_PATH,
+    db_path: str = DEFAULT_DB_PATH,
     cold_max: int = DEFAULT_COLD_MAX,
     warm_min: int = DEFAULT_WARM_MIN,
 ) -> list[dict]:
@@ -131,7 +131,7 @@ def layout_actions(
     Suggested Move, Status, Expected Uplift %, Forecast Temp °C,
     and Temp Bucket.
     """
-    df = load_data(csv_path, store=store)
+    df = load_data(db_path, store=store)
     return generate_layout_actions(
         df,
         store=store,
@@ -148,7 +148,7 @@ def layout_actions(
 def get_defaults() -> str:
     """Return the default configuration values."""
     return (
-        f"CSV_PATH={DEFAULT_CSV_PATH}\n"
+        f"DB_PATH={DEFAULT_DB_PATH}\n"
         f"COLD_MAX={DEFAULT_COLD_MAX}\n"
         f"WARM_MIN={DEFAULT_WARM_MIN}\n"
     )

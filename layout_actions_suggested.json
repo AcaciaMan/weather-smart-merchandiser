@@ -1,0 +1,74 @@
+[
+  {
+    "Action":"Warm layout \u2013 Garden \u2013 2026-03-06",
+    "Store":"Riga 1",
+    "Start Date":"2026-03-06",
+    "End Date":"2026-03-06",
+    "Category":"Garden",
+    "Suggested Move":"Move Garden to front\/endcap for warm spell",
+    "Status":"Planned",
+    "Expected Uplift %":15,
+    "Forecast Temp \u00b0C":19.0,
+    "Temp Bucket":"warm"
+  },
+  {
+    "Action":"Warm layout \u2013 Cooling \u2013 2026-03-06",
+    "Store":"Riga 1",
+    "Start Date":"2026-03-06",
+    "End Date":"2026-03-06",
+    "Category":"Cooling",
+    "Suggested Move":"Move Cooling to front\/endcap for warm spell",
+    "Status":"Planned",
+    "Expected Uplift %":15,
+    "Forecast Temp \u00b0C":19.0,
+    "Temp Bucket":"warm"
+  },
+  {
+    "Action":"Warm layout \u2013 Garden \u2013 2026-03-07",
+    "Store":"Riga 1",
+    "Start Date":"2026-03-07",
+    "End Date":"2026-03-07",
+    "Category":"Garden",
+    "Suggested Move":"Move Garden to front\/endcap for warm spell",
+    "Status":"Planned",
+    "Expected Uplift %":15,
+    "Forecast Temp \u00b0C":21.0,
+    "Temp Bucket":"warm"
+  },
+  {
+    "Action":"Warm layout \u2013 Cooling \u2013 2026-03-07",
+    "Store":"Riga 1",
+    "Start Date":"2026-03-07",
+    "End Date":"2026-03-07",
+    "Category":"Cooling",
+    "Suggested Move":"Move Cooling to front\/endcap for warm spell",
+    "Status":"Planned",
+    "Expected Uplift %":15,
+    "Forecast Temp \u00b0C":21.0,
+    "Temp Bucket":"warm"
+  },
+  {
+    "Action":"Warm layout \u2013 Garden \u2013 2026-03-08",
+    "Store":"Riga 1",
+    "Start Date":"2026-03-08",
+    "End Date":"2026-03-08",
+    "Category":"Garden",
+    "Suggested Move":"Move Garden to front\/endcap for warm spell",
+    "Status":"Planned",
+    "Expected Uplift %":15,
+    "Forecast Temp \u00b0C":23.0,
+    "Temp Bucket":"warm"
+  },
+  {
+    "Action":"Warm layout \u2013 Cooling \u2013 2026-03-08",
+    "Store":"Riga 1",
+    "Start Date":"2026-03-08",
+    "End Date":"2026-03-08",
+    "Category":"Cooling",
+    "Suggested Move":"Move Cooling to front\/endcap for warm spell",
+    "Status":"Planned",
+    "Expected Uplift %":15,
+    "Forecast Temp \u00b0C":23.0,
+    "Temp Bucket":"warm"
+  }
+]

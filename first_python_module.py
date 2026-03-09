@@ -5,12 +5,14 @@ Reusable functions for weather-driven merchandising analysis.
 """
 
 import os
+import sqlite3
 import pandas as pd
 from datetime import timedelta
 
 # ---- DEFAULT CONFIG ----
 _HERE = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_CSV_PATH = os.path.join(_HERE, "sales_weather_daily.csv")
+DEFAULT_DB_PATH = os.path.join(_HERE, "sales_weather.db")
+DEFAULT_TABLE = "sales_weather_daily"
 DEFAULT_COLD_MAX = 8    # <= 8 °C  → cold
 DEFAULT_WARM_MIN = 15   # >= 15 °C → warm
 
@@ -26,12 +28,18 @@ def temp_bucket(temp: float, cold_max: int = DEFAULT_COLD_MAX, warm_min: int = D
     return "mild"
 
 
-def load_data(csv_path: str = DEFAULT_CSV_PATH, store: str | None = None) -> pd.DataFrame:
-    """Load the sales-weather CSV, parse dates, and optionally filter by store."""
-    df = pd.read_csv(csv_path)
+def load_data(db_path: str = DEFAULT_DB_PATH, store: str | None = None) -> pd.DataFrame:
+    """Load the sales-weather data from SQLite, parse dates, and optionally filter by store."""
+    with sqlite3.connect(db_path) as conn:
+        if store:
+            df = pd.read_sql_query(
+                f"SELECT * FROM {DEFAULT_TABLE} WHERE Store = ?",
+                conn,
+                params=(store,),
+            )
+        else:
+            df = pd.read_sql_query(f"SELECT * FROM {DEFAULT_TABLE}", conn)
     df["Date"] = pd.to_datetime(df["Date"])
-    if store:
-        df = df[df["Store"] == store].copy()
     return df
 
 
@@ -129,7 +137,7 @@ def generate_layout_actions(
 
 if __name__ == "__main__":
     STORE_NAME = "Riga 1"
-    df = load_data(DEFAULT_CSV_PATH, store=STORE_NAME)
+    df = load_data(DEFAULT_DB_PATH, store=STORE_NAME)
 
     avg = get_demand_signals(df)
     print("Average units by temp bucket and category:\n")
@@ -143,5 +151,5 @@ if __name__ == "__main__":
     print("\nSuggested layout actions:\n")
     print(actions_df)
 
-    actions_df.to_csv("layout_actions_suggested.csv", index=False)
-    print("\nSaved to layout_actions_suggested.csv")
+    actions_df.to_json("layout_actions_suggested.json", orient="records", indent=2)
+    print("\nSaved to layout_actions_suggested.json")
