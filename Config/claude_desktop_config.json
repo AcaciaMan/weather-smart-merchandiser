@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "weather-smart-merchandiser": {
+      "command": "C:\\Python313\\python.exe",
+      "args": [
+        "C:\\work\\GitHub\\weather-smart-merchandiser\\server.py"
+      ]
+    }
+  },
+  "preferences": {
+    "menuBarEnabled": false,
+    "legacyQuickEntryEnabled": false,
+    "coworkWebSearchEnabled": true,
+    "sidebarMode": "chat",
+    "coworkScheduledTasksEnabled": false
+  }
+}

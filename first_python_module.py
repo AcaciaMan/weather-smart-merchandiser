@@ -96,7 +96,7 @@ def generate_layout_actions(
     avg_units = get_demand_signals(df, cold_max, warm_min)
 
     last_date = df["Date"].max()
-    last_temp = df.loc[df["Date"] == last_date, "Temp °C"].mean()
+    last_temp = float(df.loc[df["Date"] == last_date, "Temp °C"].mean())
     forecasts = forecast_temperatures(last_temp, days_ahead)
 
     actions: list[dict] = []
@@ -119,7 +119,7 @@ def generate_layout_actions(
                 expected_uplift = 5
 
             actions.append({
-                "Action": f"{bucket.capitalize()} layout – {cat} – {fdate.date()}",
+                "Action": f"{bucket.capitalize()} layout – {cat} – {fdate.date().isoformat()}",
                 "Store": store,
                 "Start Date": fdate.date().isoformat(),
                 "End Date": fdate.date().isoformat(),

@@ -9,6 +9,7 @@ Install for Claude: mcp install server.py
 """
 
 from mcp.server.fastmcp import FastMCP
+import json
 import pandas as pd
 
 from first_python_module import (
@@ -42,7 +43,7 @@ def demand_signals(
     db_path: str = DEFAULT_DB_PATH,
     cold_max: int = DEFAULT_COLD_MAX,
     warm_min: int = DEFAULT_WARM_MIN,
-) -> list[dict]:
+) -> str:
     """
     Compute average units sold per temperature bucket (cold/mild/warm)
     and product category for a given store.
@@ -52,7 +53,7 @@ def demand_signals(
     """
     df = load_data(db_path, store=store)
     avg = get_demand_signals(df, cold_max, warm_min)
-    return avg.to_dict(orient="records")
+    return json.dumps(avg.to_dict(orient="records"), indent=2)
 
 
 @mcp.tool()
@@ -90,7 +91,7 @@ def forecast(
     days_ahead: int = 3,
     delta_per_day: float = 2.0,
     db_path: str = DEFAULT_DB_PATH,
-) -> list[dict]:
+) -> str:
     """
     Return a simple toy forecast for a store:
     each future day is *delta_per_day* °C warmer than the last observed temp.
@@ -99,7 +100,7 @@ def forecast(
     """
     df = load_data(db_path, store=store)
     last_date = df["Date"].max()
-    last_temp = df.loc[df["Date"] == last_date, "Temp °C"].mean()
+    last_temp = float(df.loc[df["Date"] == last_date, "Temp °C"].mean())
     temps = forecast_temperatures(last_temp, days_ahead, delta_per_day)
 
     results = []
@@ -111,7 +112,7 @@ def forecast(
             "forecast_temp": t,
             "temp_bucket": temp_bucket(t),
         })
-    return results
+    return json.dumps(results, indent=2)
 
 
 @mcp.tool()
@@ -122,7 +123,7 @@ def layout_actions(
     db_path: str = DEFAULT_DB_PATH,
     cold_max: int = DEFAULT_COLD_MAX,
     warm_min: int = DEFAULT_WARM_MIN,
-) -> list[dict]:
+) -> str:
     """
     Generate merchandising layout-change suggestions for the next
     *days_ahead* days based on historical sales-weather data.
@@ -132,7 +133,7 @@ def layout_actions(
     and Temp Bucket.
     """
     df = load_data(db_path, store=store)
-    return generate_layout_actions(
+    actions = generate_layout_actions(
         df,
         store=store,
         days_ahead=days_ahead,
@@ -140,6 +141,7 @@ def layout_actions(
         cold_max=cold_max,
         warm_min=warm_min,
     )
+    return json.dumps(actions, indent=2)
 
 
 # ---- resources (read-only data exposed to the AI) ----
